@@ -101,7 +101,10 @@ soup = BeautifulSoup(html, 'lxml')
 
 links = soup.find('div', 'node__content').find_all('a')
 for link in links:
-    url = 'http://www.gosh.nhs.uk'+link['href']
+    if 'http' not in link['href']:
+        url = 'http://www.gosh.nhs.uk'+link['href']
+    else:
+        url = link['href']
     try:
         title = link.text.strip()
     except:
@@ -138,6 +141,7 @@ for link in links:
     if '@' in title:
         break
     csvYr = title.split(',')[-1].strip()
+
     csvMth = convert_mth_strings(csvMth.upper())
     data.append([csvYr, csvMth, url])
 
